@@ -86,4 +86,6 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectMapper, Subject> impl
         Integer count = baseMapper.selectCount(wrapper);
         return count>0;
     }
+
+    //测试命令行使用Git命令
 }
