@@ -2,6 +2,7 @@ package com.atguigu.ggkt.vod.service;
 
 import com.atguigu.ggkt.model.vod.CourseDescription;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author atguigu
  * @since 2022-10-20
  */
+
 public interface CourseDescriptionService extends IService<CourseDescription> {
 
 }

@@ -1,16 +1,20 @@
 package com.atguigu.ggkt.vod.service.impl;
 
 import com.atguigu.ggkt.model.vod.Course;
+import com.atguigu.ggkt.model.vod.CourseDescription;
 import com.atguigu.ggkt.model.vod.Subject;
 import com.atguigu.ggkt.model.vod.Teacher;
+import com.atguigu.ggkt.vo.vod.CourseFormVo;
 import com.atguigu.ggkt.vo.vod.CourseQueryVo;
 import com.atguigu.ggkt.vod.mapper.CourseMapper;
+import com.atguigu.ggkt.vod.service.CourseDescriptionService;
 import com.atguigu.ggkt.vod.service.CourseService;
 import com.atguigu.ggkt.vod.service.SubjectService;
 import com.atguigu.ggkt.vod.service.TeacherService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -35,6 +39,26 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private CourseDescriptionService descriptionService;
+
+    @Override
+    public Long saveCourseInfo(CourseFormVo courseFormVo) {
+        //保存课程基本信息
+        Course course = new Course();
+        BeanUtils.copyProperties(courseFormVo, course);
+        baseMapper.insert(course);
+
+        //保存课程详情信息
+        CourseDescription courseDescription = new CourseDescription();
+        courseDescription.setDescription(courseFormVo.getDescription());
+        courseDescription.setCourseId(course.getId());
+        descriptionService.save(courseDescription);
+
+        //返回课程id
+        return course.getId();
+    }
 
     @Override
     public Map<String, Object> findPage(Page<Course> pageParam, CourseQueryVo courseQueryVo) {

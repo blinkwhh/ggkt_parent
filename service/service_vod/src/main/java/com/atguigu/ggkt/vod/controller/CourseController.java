@@ -3,6 +3,7 @@ package com.atguigu.ggkt.vod.controller;
 
 import com.atguigu.ggkt.model.vod.Course;
 import com.atguigu.ggkt.result.Result;
+import com.atguigu.ggkt.vo.vod.CourseFormVo;
 import com.atguigu.ggkt.vo.vod.CourseQueryVo;
 import com.atguigu.ggkt.vod.service.CourseService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,6 +31,15 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    //添加课程基本信息
+    @ApiOperation(value = "新增")
+    @PostMapping("save")
+    public Result save(@RequestBody CourseFormVo courseFormVo) {
+        Long courseId = courseService.saveCourseInfo(courseFormVo);
+        return Result.ok(courseId);
+    }
+
+    //点播课程列表
     @ApiOperation(value = "获取分页列表")
     @GetMapping("{page}/{limit}")
     public Result index(
