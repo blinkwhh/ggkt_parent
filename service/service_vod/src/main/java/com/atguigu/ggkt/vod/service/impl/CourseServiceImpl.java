@@ -60,6 +60,39 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         return course.getId();
     }
 
+    //根据id获取课程信息
+    @Override
+    public CourseFormVo getCourseFormVoById(Long id) {
+        //从course表中取数据
+        Course course = baseMapper.selectById(id);
+        if(course == null){
+            return null;
+        }
+        //从course_description表中取数据
+        CourseDescription courseDescription = descriptionService.getById(id);
+        //创建courseInfoForm对象
+        CourseFormVo courseFormVo = new CourseFormVo();
+        BeanUtils.copyProperties(course, courseFormVo);
+        if(courseDescription != null){
+            courseFormVo.setDescription(courseDescription.getDescription());
+        }
+        return courseFormVo;
+    }
+
+    //根据id修改课程信息
+    @Override
+    public void updateCourseById(CourseFormVo courseFormVo) {
+        //修改课程基本信息
+        Course course = new Course();
+        BeanUtils.copyProperties(courseFormVo, course);
+        baseMapper.updateById(course);
+        //修改课程详情信息
+        CourseDescription courseDescription = descriptionService.getById(course.getId());
+        courseDescription.setDescription(courseFormVo.getDescription());
+        courseDescription.setId(course.getId());
+        descriptionService.updateById(courseDescription);
+    }
+
     @Override
     public Map<String, Object> findPage(Page<Course> pageParam, CourseQueryVo courseQueryVo) {
         //获取条件值

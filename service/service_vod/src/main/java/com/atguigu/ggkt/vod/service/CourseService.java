@@ -23,4 +23,10 @@ public interface CourseService extends IService<Course> {
 
     //添加课程基本信息
     Long saveCourseInfo(CourseFormVo courseFormVo);
+
+    //根据id获取课程信息
+    CourseFormVo getCourseFormVoById(Long id);
+
+    //根据id修改课程信息
+    void updateCourseById(CourseFormVo courseFormVo);
 }
