@@ -24,12 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <p>
- * 课程 服务实现类
- * </p>
  *
- * @author atguigu
- * @since 2022-10-20
+ * @author wanghanhan
+ * @since 2022-11-14
  */
 @Service
 public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> implements CourseService {
