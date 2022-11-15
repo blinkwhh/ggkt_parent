@@ -90,6 +90,7 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         descriptionService.updateById(courseDescription);
     }
 
+    //课程列表
     @Override
     public Map<String, Object> findPage(Page<Course> pageParam, CourseQueryVo courseQueryVo) {
         //获取条件值
