@@ -4,6 +4,7 @@ package com.atguigu.ggkt.vod.controller;
 import com.atguigu.ggkt.model.vod.Course;
 import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.vo.vod.CourseFormVo;
+import com.atguigu.ggkt.vo.vod.CoursePublishVo;
 import com.atguigu.ggkt.vo.vod.CourseQueryVo;
 import com.atguigu.ggkt.vod.service.CourseService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,12 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * <p>
- * 课程 前端控制器
- * </p>
  *
- * @author atguigu
- * @since 2022-10-20
+ * @author wanghanhan
+ * @since 2022-11-15
  */
 @ApiOperation("课程管理接口")
 @RestController
@@ -65,6 +63,26 @@ public class CourseController {
     @PutMapping("update")
     public Result updateById(@RequestBody CourseFormVo courseFormVo) {
         courseService.updateCourseById(courseFormVo);
+        return Result.ok();
+    }
+
+    @ApiOperation("根据id获取课程发布信息")
+    @GetMapping("getCoursePublishVo/{id}")
+    public Result getCoursePublishVoById(
+            @ApiParam(value = "课程ID", required = true)
+            @PathVariable Long id){
+
+        CoursePublishVo coursePublishVo = courseService.getCoursePublishVo(id);
+        return Result.ok(coursePublishVo);
+    }
+
+    @ApiOperation("根据id发布课程")
+    @PutMapping("publishCourseById/{id}")
+    public Result publishCourseById(
+            @ApiParam(value = "课程ID", required = true)
+            @PathVariable Long id){
+
+        boolean result = courseService.publishCourseById(id);
         return Result.ok();
     }
 }
