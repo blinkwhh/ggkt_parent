@@ -52,6 +52,7 @@ public class CourseController {
         return Result.ok(map);
     }
 
+    //根据ID获取课程信息返回给前端
     @ApiOperation(value = "获取")
     @GetMapping("get/{id}")
     public Result get(@PathVariable Long id) {
@@ -59,9 +60,10 @@ public class CourseController {
         return Result.ok(course);
     }
 
+    //修改课程信息
     @ApiOperation(value = "修改")
     @PutMapping("update")
-    public Result updateById(@RequestBody CourseFormVo courseFormVo) {
+    public Result update(@RequestBody CourseFormVo courseFormVo) {
         courseService.updateCourseById(courseFormVo);
         return Result.ok();
     }
