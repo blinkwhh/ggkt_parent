@@ -19,7 +19,7 @@ import java.util.Map;
  * @author wanghanhan
  * @since 2022-11-16
  */
-@Api(value = "VideoVisitor管理", tags = "VideoVisitor管理")
+@Api(value = "VideoVisitor管理", tags = "视频访客管理")
 @RestController
 @RequestMapping(value="/admin/vod/videoVisitor")
 @CrossOrigin

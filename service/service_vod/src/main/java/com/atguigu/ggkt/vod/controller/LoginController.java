@@ -1,6 +1,7 @@
 package com.atguigu.ggkt.vod.controller;
 
 import com.atguigu.ggkt.result.Result;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
  * @author 王寒寒
  * @create 2022-10-13 11:36
  */
+@Api(tags = "登录接口")
 @RestController
 @RequestMapping("/admin/vod/user")
 @CrossOrigin

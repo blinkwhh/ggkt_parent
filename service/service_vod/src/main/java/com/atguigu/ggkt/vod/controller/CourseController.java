@@ -8,6 +8,7 @@ import com.atguigu.ggkt.vo.vod.CoursePublishVo;
 import com.atguigu.ggkt.vo.vod.CourseQueryVo;
 import com.atguigu.ggkt.vod.service.CourseService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @author wanghanhan
  * @since 2022-11-15
  */
-@ApiOperation("课程管理接口")
+@Api(tags = "课程管理接口")
 @RestController
 @RequestMapping("/admin/vod/course")
 @CrossOrigin

@@ -68,7 +68,7 @@ public class TeacherController {
     public Result findAllTeacher() {
         //调用service方法
         List<Teacher> list = teacherService.list();
-        return Result.ok(list).message(ResultCodeEnum.SUCCESS.getMessage()).code(ResultCodeEnum.SUCCESS.getCode());
+        return Result.ok(list).message(ResultCodeEnum.SUCCESS.getMessage()).code(20000);
     }
 
     // remove/1
