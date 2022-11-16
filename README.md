@@ -1,4 +1,7 @@
 # ggkt_parent
+
+swagger网址：http://localhost:8301/swagger-ui.html
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
