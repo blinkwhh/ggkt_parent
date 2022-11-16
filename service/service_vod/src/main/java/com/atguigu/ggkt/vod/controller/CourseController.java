@@ -65,7 +65,7 @@ public class CourseController {
     @PutMapping("update")
     public Result update(@RequestBody CourseFormVo courseFormVo) {
         courseService.updateCourseById(courseFormVo);
-        return Result.ok();
+        return Result.ok(courseFormVo.getId());
     }
 
     @ApiOperation("根据id获取课程发布信息")
