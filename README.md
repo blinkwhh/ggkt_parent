@@ -2,6 +2,8 @@
 
 swagger网址：http://localhost:8301/swagger-ui.html
 
+git log：按"q"退出
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
