@@ -4,6 +4,8 @@ swagger网址：http://localhost:8301/swagger-ui.html
 
 git log：按"q"退出
 
+腾讯云对象存储：https://console.cloud.tencent.com/cos/bucket
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
