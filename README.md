@@ -6,6 +6,8 @@ git log：按"q"退出
 
 腾讯云对象存储：https://console.cloud.tencent.com/cos/bucket
 
+腾讯云云点播：https://console.cloud.tencent.com/vod/media
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
