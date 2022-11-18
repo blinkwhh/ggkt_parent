@@ -14,7 +14,6 @@ import java.util.Map;
 @Api(tags = "登录接口")
 @RestController
 @RequestMapping("/admin/vod/user")
-@CrossOrigin
 public class LoginController {
     /**
      * 登录

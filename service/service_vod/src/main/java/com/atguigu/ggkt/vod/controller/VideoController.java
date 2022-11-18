@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author atguigu
- * @since 2022-11-14
+ * @author wanghanhan
+ * @since 2022-11-19
  */
 @Api(tags = "课程小结（课时）")
 @RestController
 @RequestMapping("/admin/vod/video")
-@CrossOrigin
 public class VideoController {
 
     @Autowired

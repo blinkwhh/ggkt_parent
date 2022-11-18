@@ -24,7 +24,6 @@ import java.util.Map;
 @Api(tags = "课程管理接口")
 @RestController
 @RequestMapping("/admin/vod/course")
-@CrossOrigin
 public class CourseController {
 
     @Autowired

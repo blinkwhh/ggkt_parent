@@ -23,13 +23,12 @@ import java.util.List;
  * 讲师 前端控制器
  * </p>
  *
- * @author atguigu
- * @since 2022-09-25
+ * @author wanghanhan
+ * @since 2022-11-19
  */
 @Api(tags = "讲师管理接口")
 @RestController
 @RequestMapping(value="/admin/vod/teacher")
-@CrossOrigin
 public class TeacherController {
 
     @Autowired
