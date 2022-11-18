@@ -8,6 +8,8 @@ git log：按"q"退出
 
 腾讯云云点播：https://console.cloud.tencent.com/vod/media
 
+nacos地址：http://192.168.1.3:8848/nacos/index.html
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
