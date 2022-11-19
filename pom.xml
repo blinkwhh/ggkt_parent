@@ -12,6 +12,7 @@
         <module>service_gateway</module>
         <module>service/service_order</module>
         <module>service_activity</module>
+        <module>service_user</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
