@@ -10,6 +10,8 @@ git log：按"q"退出
 
 nacos地址：http://192.168.1.3:8848/nacos/index.html
 
+maven模块中不要直接在java包中建class或interface文件，应先新建包，然后在新建的包中再新建文件！
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
