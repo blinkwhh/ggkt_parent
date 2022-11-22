@@ -9,6 +9,7 @@ import com.atguigu.ggkt.wechat.service.MenuService;
 import com.atguigu.ggkt.wechat.utils.ConstantPropertiesUtil;
 import com.atguigu.ggkt.wechat.utils.HttpClientUtils;
 import io.swagger.annotations.ApiOperation;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,6 +80,7 @@ public class MenuController {
     }
 
     //获取access_token
+    @ApiOperation("getAccessToken")
     @GetMapping("getAccessToken")
     public Result getAccessToken() {
         try {
@@ -105,5 +107,18 @@ public class MenuController {
         }
     }
 
+    @ApiOperation(value = "同步菜单")
+    @GetMapping("syncMenu")
+    public Result createMenu() {
+        menuService.syncMenu();
+        return Result.ok(null);
+    }
+
+    @ApiOperation(value = "删除菜单")
+    @DeleteMapping("removeMenu")
+    public Result removeMenu() throws WxErrorException {
+        menuService.removeMenu();
+        return Result.ok(null);
+    }
 }
 

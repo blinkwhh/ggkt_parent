@@ -1,13 +1,19 @@
 package com.atguigu.ggkt.wechat.service.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.ggkt.model.wechat.Menu;
 import com.atguigu.ggkt.vo.wechat.MenuVo;
 import com.atguigu.ggkt.wechat.mapper.MenuMapper;
 import com.atguigu.ggkt.wechat.service.MenuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.common.service.WxService;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,6 +31,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+
+    @Autowired
+    private WxMpService wxMpService;
 
     //获取全部菜单
     @Override
@@ -59,6 +68,47 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         wrapper.eq("parent_id",0);
         List<Menu> list = baseMapper.selectList(wrapper);
         return list;
+    }
+
+    @Override
+    public void syncMenu() {
+        List<MenuVo> menuVoList = this.findMenuInfo();
+        //菜单
+        JSONArray buttonList = new JSONArray();
+        for(MenuVo oneMenuVo : menuVoList) {
+            JSONObject one = new JSONObject();
+            one.put("name", oneMenuVo.getName());
+            JSONArray subButton = new JSONArray();
+            for(MenuVo twoMenuVo : oneMenuVo.getChildren()) {
+                JSONObject view = new JSONObject();
+                view.put("type", twoMenuVo.getType());
+                if(twoMenuVo.getType().equals("view")) {
+                    view.put("name", twoMenuVo.getName());
+                    view.put("url", "http://ggkt2.vipgz1.91tunnel.com/#"
+                            +twoMenuVo.getUrl());
+                } else {
+                    view.put("name", twoMenuVo.getName());
+                    view.put("key", twoMenuVo.getMeunKey());
+                }
+                subButton.add(view);
+            }
+            one.put("sub_button", subButton);
+            buttonList.add(one);
+        }
+        //菜单
+        JSONObject button = new JSONObject();
+        button.put("button", buttonList);
+        try {
+            this.wxMpService.getMenuService().menuCreate(button.toJSONString());
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void removeMenu() throws WxErrorException {
+        wxMpService.getMenuService().menuDelete();
     }
 
 }
