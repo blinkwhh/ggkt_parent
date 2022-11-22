@@ -1,10 +1,13 @@
 package com.atguigu.ggkt.wechat.controller;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.ggkt.model.wechat.Menu;
 import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.vo.wechat.MenuVo;
 import com.atguigu.ggkt.wechat.service.MenuService;
+import com.atguigu.ggkt.wechat.utils.ConstantPropertiesUtil;
+import com.atguigu.ggkt.wechat.utils.HttpClientUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -73,6 +76,33 @@ public class MenuController {
     public Result batchRemove(@RequestBody List<Long> idList) {
         menuService.removeByIds(idList);
         return Result.ok(null);
+    }
+
+    //获取access_token
+    @GetMapping("getAccessToken")
+    public Result getAccessToken() {
+        try {
+            //拼接请求地址
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("https://api.weixin.qq.com/cgi-bin/token");
+            buffer.append("?grant_type=client_credential");
+            buffer.append("&appid=%s");
+            buffer.append("&secret=%s");
+            //请求地址设置参数
+            String url = String.format(buffer.toString(),
+                    ConstantPropertiesUtil.ACCESS_KEY_ID,
+                    ConstantPropertiesUtil.ACCESS_KEY_SECRET);
+            //发送http请求
+            String tokenString = HttpClientUtils.get(url);
+            //获取access_token
+            JSONObject jsonObject = JSONObject.parseObject(tokenString);
+            String access_token = jsonObject.getString("access_token");
+            //返回
+            return Result.ok(access_token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.fail(null);
+        }
     }
 
 }
