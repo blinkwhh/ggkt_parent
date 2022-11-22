@@ -46,6 +46,7 @@ public class OrderInfoController {
                     OrderInfoQueryVo orderInfoQueryVo) {
         Page<OrderInfo> pageParam = new Page<>(page, limit);
         Map<String,Object> map = orderInfoService.findPageOrderInfo(pageParam, orderInfoQueryVo);
+        System.out.println("order map: " + map.toString());
         return Result.ok(map);
     }
 

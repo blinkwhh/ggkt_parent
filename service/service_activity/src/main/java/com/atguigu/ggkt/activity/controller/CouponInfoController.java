@@ -8,6 +8,7 @@ import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.vo.activity.CouponUseQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.List;
  * @author wanghanhan
  * @since 2022-11-19
  */
+@Api(tags = "优惠券管理")
 @RestController
 @RequestMapping("/admin/activity/couponInfo")
 public class CouponInfoController {
@@ -38,7 +40,9 @@ public class CouponInfoController {
             @ApiParam(name = "limit", value = "每页记录数", required = true)
             @PathVariable Long limit) {
         Page<CouponInfo> pageParam = new Page<>(page, limit);
+        System.out.println("pageModel + before");
         IPage<CouponInfo> pageModel = couponInfoService.page(pageParam);
+        System.out.println("pageModel + after" + pageModel.toString());
         return Result.ok(pageModel);
     }
 
