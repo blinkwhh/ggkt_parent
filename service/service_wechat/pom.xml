@@ -16,7 +16,18 @@
             <artifactId>weixin-java-mp</artifactId>
             <version>4.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+        </dependency>
     </dependencies>
+
 
     <artifactId>service_wechat</artifactId>
 
