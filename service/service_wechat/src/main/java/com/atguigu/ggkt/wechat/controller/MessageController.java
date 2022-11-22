@@ -1,14 +1,24 @@
 package com.atguigu.ggkt.wechat.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.ggkt.wechat.utils.SHA1;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 王寒寒
@@ -19,7 +29,7 @@ import java.util.Arrays;
 @Slf4j
 public class MessageController {
 
-//    TODO
+//    TODO maybe token can be changed to wanghanhan
     private static final String token = "ggkt";
 
 
@@ -57,5 +67,35 @@ public class MessageController {
         return signature.equals(temp);
     }
 
+
+    /**
+     * 接收微信服务器发送来的消息
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    @PostMapping
+//    TODO
+    public String receiveMessage(HttpServletRequest request) throws Exception {
+
+        WxMpXmlMessage wxMpXmlMessage = WxMpXmlMessage.fromXml(request.getInputStream());
+        System.out.println(JSONObject.toJSONString(wxMpXmlMessage));
+        return "success";
+    }
+
+    private Map<String, String> parseXml(HttpServletRequest request) throws Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        InputStream inputStream = request.getInputStream();
+        SAXReader reader = new SAXReader();
+        Document document = reader.read(inputStream);
+        Element root = document.getRootElement();
+        List<Element> elementList = root.elements();
+        for (Element e : elementList) {
+            map.put(e.getName(), e.getText());
+        }
+        inputStream.close();
+        inputStream = null;
+        return map;
+    }
 
 }
