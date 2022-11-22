@@ -18,6 +18,8 @@ maven模块中不要直接在java包中建class或interface文件，应先新建
 
 微信/消息接入文档：https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html
 
+配置内网穿透(ngrok)：https://ngrok.cc/login/register
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
