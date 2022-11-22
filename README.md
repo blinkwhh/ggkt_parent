@@ -14,6 +14,10 @@ nacos启动方式：在nacos/bin文件中执行cmd，然后startup.cmd -m standa
 
 maven模块中不要直接在java包中建class或interface文件，应先新建包，然后在新建的包中再新建文件！
 
+微信公众平台接口测试帐号：https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login&token=399029368&lang=zh_CN
+
+微信/消息接入文档：https://developers.weixin.qq.com/doc/offiaccount/Basic_Information/Access_Overview.html
+
 尚硅谷-硅谷课堂
 
 前后端分离项目
