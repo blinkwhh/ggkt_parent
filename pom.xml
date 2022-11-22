@@ -15,6 +15,7 @@
         <module>service_user</module>
         <module>service_client</module>
         <module>service_client/service_user_client</module>
+        <module>service/service_wechat</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
