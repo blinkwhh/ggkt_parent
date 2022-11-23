@@ -16,6 +16,11 @@
             <artifactId>weixin-java-mp</artifactId>
             <version>4.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>service_course_client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 
