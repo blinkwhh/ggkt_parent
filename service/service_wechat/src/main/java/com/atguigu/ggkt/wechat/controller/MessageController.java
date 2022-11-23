@@ -30,7 +30,7 @@ import java.util.Map;
 public class MessageController {
 
 //    TODO maybe token can be changed to wanghanhan
-    private static final String token = "ggkt";
+    private static final String token = "wanghanhan";
 
 
     /**
@@ -40,6 +40,7 @@ public class MessageController {
      */
     @GetMapping
     public String verifyToken(HttpServletRequest request) {
+        log.info("走到这里");
         String signature = request.getParameter("signature");
         String timestamp = request.getParameter("timestamp");
         String nonce = request.getParameter("nonce");
