@@ -1,6 +1,7 @@
 package com.atguigu.ggkt.wechat.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.ggkt.wechat.service.MessageService;
 import com.atguigu.ggkt.wechat.utils.SHA1;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,9 @@ import java.util.Map;
 @Slf4j
 public class MessageController {
 
-//    TODO maybe token can be changed to wanghanhan
+    @Autowired
+    private MessageService messageService;
+
     private static final String token = "wanghanhan";
 
 
@@ -76,12 +80,10 @@ public class MessageController {
      * @throws Exception
      */
     @PostMapping
-//    TODO
     public String receiveMessage(HttpServletRequest request) throws Exception {
 
-        WxMpXmlMessage wxMpXmlMessage = WxMpXmlMessage.fromXml(request.getInputStream());
-        System.out.println(JSONObject.toJSONString(wxMpXmlMessage));
-        return "success";
+        Map<String, String> param = this.parseXml(request);
+        return messageService.receiveMessage(param);
     }
 
     private Map<String, String> parseXml(HttpServletRequest request) throws Exception {

@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Api(description = "远程调用接口，会被wechat模块调用")
 @FeignClient(value = "service-vod")
-public interface findByKeyword {
+public interface CourseFeignClient {
     @ApiOperation("根据关键字查询课程")
     @GetMapping("/api/vod/course/inner/findByKeyword/{keyword}")
     List<Course> findByKeyword(@PathVariable String keyword);
