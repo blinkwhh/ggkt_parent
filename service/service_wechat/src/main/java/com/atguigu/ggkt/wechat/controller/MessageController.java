@@ -1,10 +1,12 @@
 package com.atguigu.ggkt.wechat.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.wechat.service.MessageService;
 import com.atguigu.ggkt.wechat.utils.SHA1;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -72,7 +74,6 @@ public class MessageController {
         return signature.equals(temp);
     }
 
-
     /**
      * 接收微信服务器发送来的消息
      * @param request
@@ -101,4 +102,9 @@ public class MessageController {
         return map;
     }
 
+    @GetMapping("/pushPayMessage")
+    public Result pushPayMessage() throws WxErrorException {
+        messageService.pushPayMessage(1L);
+        return Result.ok();
+    }
 }
