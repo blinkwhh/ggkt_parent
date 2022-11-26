@@ -22,6 +22,9 @@ public interface CourseService extends IService<Course> {
     //点播课程列表
     Map<String, Object> findPage(Page<Course> pageParam, CourseQueryVo courseQueryVo);
 
+    //根据id查询课程
+    Map<String, Object> getInfoById(Long courseId);
+
     //添加课程基本信息
     Long saveCourseInfo(CourseFormVo courseFormVo);
 
