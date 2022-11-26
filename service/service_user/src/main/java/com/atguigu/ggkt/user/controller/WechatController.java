@@ -36,10 +36,14 @@ public class WechatController {
     private String userInfoUrl;
 
     @GetMapping("/authorize")
+    /**
+     * 同意授权，获取code
+     * @returnUrl 前端APP.vue返回网址的部分
+     */
     public String authorize(@RequestParam("returnUrl") String returnUrl, HttpServletRequest request) {
         String redirectURL = wxMpService.oauth2buildAuthorizationUrl(userInfoUrl,
                 WxConsts.OAUTH2_SCOPE_USER_INFO,
-                URLEncoder.encode(returnUrl.replace("guiguketan", "#")));
+                URLEncoder.encode(returnUrl.replace("wanghanhan", "#")));
         return "redirect:" + redirectURL;
     }
 
@@ -63,7 +67,6 @@ public class WechatController {
             userInfo.setAvatar(wxMpUser.getHeadImgUrl());
             userInfo.setSex(wxMpUser.getSexId());
             userInfo.setProvince(wxMpUser.getProvince());
-
             userInfoService.save(userInfo);
         }
         //生成token
