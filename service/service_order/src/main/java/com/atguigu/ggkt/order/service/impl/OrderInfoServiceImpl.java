@@ -6,6 +6,7 @@ import com.atguigu.ggkt.model.order.OrderInfo;
 import com.atguigu.ggkt.order.mapper.OrderInfoMapper;
 import com.atguigu.ggkt.order.service.OrderDetailService;
 import com.atguigu.ggkt.order.service.OrderInfoService;
+import com.atguigu.ggkt.vo.order.OrderFormVo;
 import com.atguigu.ggkt.vo.order.OrderInfoQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -78,6 +79,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         map.put("pageCount",pageCount);
         map.put("records",records);
         return map;
+    }
+
+    //生成点播课程订单实现类
+    @Override
+    public Long submitOrder(OrderFormVo orderFormVo) {
+        //TODO
+        return null;
     }
 
     //查询订单详情数据
