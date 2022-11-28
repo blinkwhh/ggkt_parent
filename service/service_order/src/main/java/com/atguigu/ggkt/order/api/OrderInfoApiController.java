@@ -25,7 +25,7 @@ public class OrderInfoApiController {
 
     @ApiOperation("新增点播课程订单")
     @PostMapping("submitOrder")
-    public Result submitOrder(@RequestBody OrderFormVo orderFormVo, HttpServletRequest request) {
+    public Result submitOrder(@RequestBody OrderFormVo orderFormVo, HttpServletRequest request) throws Exception {
         //返回订单id
         Long orderId = orderInfoService.submitOrder(orderFormVo);
         return Result.ok(orderId);

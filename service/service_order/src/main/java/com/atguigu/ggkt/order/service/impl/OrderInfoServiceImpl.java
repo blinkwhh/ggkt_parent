@@ -1,13 +1,23 @@
 package com.atguigu.ggkt.order.service.impl;
 
 
+import com.atguigu.ggkt.client.activity.CouponInfoFeignClient;
+import com.atguigu.ggkt.client.course.CourseFeignClient;
+import com.atguigu.ggkt.client.user.UserInfoFeignClient;
+import com.atguigu.ggkt.enums.ResultCodeEnum;
+import com.atguigu.ggkt.model.activity.CouponInfo;
 import com.atguigu.ggkt.model.order.OrderDetail;
 import com.atguigu.ggkt.model.order.OrderInfo;
+import com.atguigu.ggkt.model.user.UserInfo;
+import com.atguigu.ggkt.model.vod.Course;
 import com.atguigu.ggkt.order.mapper.OrderInfoMapper;
 import com.atguigu.ggkt.order.service.OrderDetailService;
 import com.atguigu.ggkt.order.service.OrderInfoService;
+import com.atguigu.ggkt.utils.AuthContextHolder;
+import com.atguigu.ggkt.utils.OrderNoUtils;
 import com.atguigu.ggkt.vo.order.OrderFormVo;
 import com.atguigu.ggkt.vo.order.OrderInfoQueryVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +43,18 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private OrderInfoService orderInfoService;
+
+    @Autowired
+    private CourseFeignClient courseFeignClient;
+
+    @Autowired
+    private UserInfoFeignClient userInfoFeignClient;
+
+    @Autowired
+    private CouponInfoFeignClient couponInfoFeignClient;
 
     @Override
     public Map<String, Object> findPageOrderInfo(Page<OrderInfo> pageParam, OrderInfoQueryVo orderInfoQueryVo) {
@@ -83,9 +106,74 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     //生成点播课程订单实现类
     @Override
-    public Long submitOrder(OrderFormVo orderFormVo) {
-        //TODO
-        return null;
+    public Long submitOrder(OrderFormVo orderFormVo) throws Exception {
+        Long userId = AuthContextHolder.getUserId();
+        Long courseId = orderFormVo.getCourseId();
+        Long couponId = orderFormVo.getCouponId();
+
+        //查询当前用户是否已有当前课程的订单
+        LambdaQueryWrapper<OrderDetail> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderDetail::getCourseId, courseId);
+        queryWrapper.eq(OrderDetail::getUserId, userId);
+        OrderDetail orderDetailExist = orderDetailService.getOne(queryWrapper);
+        if(orderDetailExist != null){
+            return orderDetailExist.getId(); //如果订单已存在，则直接返回订单id
+        }
+
+        //查询课程信息
+        Course course = courseFeignClient.getById(courseId);
+        if (course == null) {
+            throw new Exception("课程信息不存在");
+            //TODO
+//            throw new GlktException(ResultCodeEnum.DATA_ERROR.getCode(),
+//                    ResultCodeEnum.DATA_ERROR.getMessage());
+        }
+
+        //查询用户信息
+        UserInfo userInfo = userInfoFeignClient.getById(userId);
+        if (userInfo == null) {
+            throw new Exception("用户信息不存在");
+//            throw new GlktException(ResultCodeEnum.DATA_ERROR.getCode(),
+//                    ResultCodeEnum.DATA_ERROR.getMessage());
+        }
+
+        //优惠券金额
+        BigDecimal couponReduce = new BigDecimal(0);
+        if(null != couponId) {
+            CouponInfo couponInfo = couponInfoFeignClient.getById(couponId);
+            couponReduce = couponInfo.getAmount();
+        }
+
+        //创建订单
+        OrderInfo orderInfo = new OrderInfo();
+        orderInfo.setUserId(userId);
+        orderInfo.setNickName(userInfo.getNickName());
+        orderInfo.setPhone(userInfo.getPhone());
+        orderInfo.setProvince(userInfo.getProvince());
+        orderInfo.setOriginAmount(course.getPrice());
+        orderInfo.setCouponReduce(couponReduce);
+        orderInfo.setFinalAmount(orderInfo.getOriginAmount().subtract(orderInfo.getCouponReduce()));
+        orderInfo.setOutTradeNo(OrderNoUtils.getOrderNo());
+        orderInfo.setTradeBody(course.getTitle());
+        orderInfo.setOrderStatus("0");
+        this.save(orderInfo);
+
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(orderInfo.getId());
+        orderDetail.setUserId(userId);
+        orderDetail.setCourseId(courseId);
+        orderDetail.setCourseName(course.getTitle());
+        orderDetail.setCover(course.getCover());
+        orderDetail.setOriginAmount(course.getPrice());
+        orderDetail.setCouponReduce(new BigDecimal(0));
+        orderDetail.setFinalAmount(orderDetail.getOriginAmount().subtract(orderDetail.getCouponReduce()));
+        orderDetailService.save(orderDetail);
+
+        //更新优惠券状态，优惠券可以不使用
+        if(null != orderFormVo.getCouponUseId()) {
+            couponInfoFeignClient.updateCouponInfoUseStatus(orderFormVo.getCouponUseId(), orderInfo.getId());
+        }
+        return orderInfo.getId();
     }
 
     //查询订单详情数据

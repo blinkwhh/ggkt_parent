@@ -23,5 +23,5 @@ public interface OrderInfoService extends IService<OrderInfo> {
     Map<String, Object> findPageOrderInfo(Page<OrderInfo> pageParam, OrderInfoQueryVo orderInfoQueryVo);
 
     //生成点播课程订单
-    Long submitOrder(OrderFormVo orderFormVo);
+    Long submitOrder(OrderFormVo orderFormVo) throws Exception;
 }
