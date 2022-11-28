@@ -1,4 +1,4 @@
-package com.atguigu.ggkt.user.controller;
+package com.atguigu.ggkt.user.api;
 
 import com.alibaba.fastjson.JSON;
 import com.atguigu.ggkt.model.user.UserInfo;
