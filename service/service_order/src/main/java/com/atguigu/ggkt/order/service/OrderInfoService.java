@@ -4,6 +4,7 @@ package com.atguigu.ggkt.order.service;
 import com.atguigu.ggkt.model.order.OrderInfo;
 import com.atguigu.ggkt.vo.order.OrderFormVo;
 import com.atguigu.ggkt.vo.order.OrderInfoQueryVo;
+import com.atguigu.ggkt.vo.order.OrderInfoVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -24,4 +25,7 @@ public interface OrderInfoService extends IService<OrderInfo> {
 
     //生成点播课程订单
     Long submitOrder(OrderFormVo orderFormVo) throws Exception;
+
+    //根据id获取订单信息
+    OrderInfoVo getOrderInfoVoById(Long id);
 }

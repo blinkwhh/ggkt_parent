@@ -17,10 +17,12 @@ import com.atguigu.ggkt.utils.AuthContextHolder;
 import com.atguigu.ggkt.utils.OrderNoUtils;
 import com.atguigu.ggkt.vo.order.OrderFormVo;
 import com.atguigu.ggkt.vo.order.OrderInfoQueryVo;
+import com.atguigu.ggkt.vo.order.OrderInfoVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -174,6 +176,18 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             couponInfoFeignClient.updateCouponInfoUseStatus(orderFormVo.getCouponUseId(), orderInfo.getId());
         }
         return orderInfo.getId();
+    }
+
+    @Override
+    public OrderInfoVo getOrderInfoVoById(Long id) {
+        OrderInfo orderInfo = this.getById(id);
+        OrderDetail orderDetail = orderDetailService.getById(id);
+
+        OrderInfoVo orderInfoVo = new OrderInfoVo();
+        BeanUtils.copyProperties(orderInfo, orderInfoVo);
+        orderInfoVo.setCourseId(orderDetail.getCourseId());
+        orderInfoVo.setCourseName(orderDetail.getCourseName());
+        return orderInfoVo;
     }
 
     //查询订单详情数据
