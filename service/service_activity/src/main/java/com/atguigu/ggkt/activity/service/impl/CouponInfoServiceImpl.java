@@ -82,7 +82,6 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
     }
 
     private CouponUse getUserInfoBycouponUse(CouponUse couponUse) {
-
         Long userId = couponUse.getUserId();
         if(!StringUtils.isEmpty(userId)) {
             UserInfo userInfo = userInfoFeignClient.getById(userId);
@@ -92,8 +91,6 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
             }
         }
         return couponUse;
-
-
     }
 
 
