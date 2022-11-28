@@ -28,4 +28,6 @@ public interface OrderInfoService extends IService<OrderInfo> {
 
     //根据id获取订单信息
     OrderInfoVo getOrderInfoVoById(Long id);
+
+    void updateOrderStatus(String out_trade_no);
 }

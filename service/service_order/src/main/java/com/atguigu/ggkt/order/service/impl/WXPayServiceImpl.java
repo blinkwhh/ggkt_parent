@@ -90,4 +90,31 @@ public class WXPayServiceImpl implements WXPayService {
         }
     }
 
+    @Override
+    public Map<String, String> queryPayStatus(String orderNo) {
+        try {
+            //1、封装参数
+            Map paramMap = new HashMap<>();
+            paramMap.put("appid", "wxf913bfa3a2c7eeeb");
+            paramMap.put("mch_id", "1481962542");
+            paramMap.put("out_trade_no", orderNo);
+            paramMap.put("nonce_str", WXPayUtil.generateNonceStr());
+
+            //2、设置请求
+            HttpClientUtils client = new HttpClientUtils("https://api.mch.weixin.qq.com/pay/orderquery");
+            client.setXmlParam(WXPayUtil.generateSignedXml(paramMap, "MXb72b9RfshXZD4FRGV5KLqmv5bx9LT9"));
+            client.setHttps(true);
+            client.post();
+            //3、返回第三方的数据
+            String xml = client.getContent();
+            Map<String, String> resultMap = WXPayUtil.xmlToMap(xml);
+            //6、转成Map
+            //7、返回
+            return resultMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -190,6 +190,17 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         return orderInfoVo;
     }
 
+    @Override
+    public void updateOrderStatus(String out_trade_no) {
+        //根据out_trade_no查询订单
+        LambdaQueryWrapper<OrderInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(OrderInfo::getOutTradeNo,out_trade_no);
+        OrderInfo orderInfo = baseMapper.selectOne(wrapper);
+        //更新订单状态 1 已经支付
+        orderInfo.setOrderStatus("1");
+        baseMapper.updateById(orderInfo);
+    }
+
     //查询订单详情数据
     private OrderInfo getOrderDetail(OrderInfo orderInfo) {
         //订单id
