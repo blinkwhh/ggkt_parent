@@ -136,4 +136,65 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
             }
         }
     }
+
+    //更新
+    @Override
+    public void updateLiveById(LiveCourseFormVo liveCourseFormVo) {
+        //根据id获取直播课程基本信息
+        LiveCourse liveCourse = baseMapper.selectById(liveCourseFormVo.getId());
+        BeanUtils.copyProperties(liveCourseFormVo,liveCourse);
+        //讲师
+        Teacher teacher =
+                teacherFeignClient.getTeacherLive(liveCourseFormVo.getTeacherId());
+
+//             *   course_id 课程ID
+//     *   account 发起直播课程的主播账号
+//     *   course_name 课程名称
+//     *   start_time 课程开始时间,格式:2015-01-01 12:00:00
+//                *   end_time 课程结束时间,格式:2015-01-01 13:00:00
+//                *   nickname 	主播的昵称
+//                *   accountIntro 	主播的简介
+//                *  options 		可选参数
+        HashMap<Object, Object> options = new HashMap<>();
+        try {
+            //为什么要更新两遍，第一个是调用欢拓云的接口来更新，第二个是更新本地数据库
+            String res = mtCloudClient.courseUpdate(liveCourse.getCourseId().toString(),
+                    teacher.getId().toString(),
+                    liveCourse.getCourseName(),
+                    new DateTime(liveCourse.getStartTime()).toString("yyyy-MM-dd HH:mm:ss"),
+                    new DateTime(liveCourse.getEndTime()).toString("yyyy-MM-dd HH:mm:ss"),
+                    teacher.getName(),
+                    teacher.getIntro(),
+                    options);
+            //返回结果转换，判断是否成功
+            CommonResult<JSONObject> commonResult = JSON.parseObject(res, CommonResult.class);
+            if(Integer.parseInt(commonResult.getCode()) == MTCloud.CODE_SUCCESS) {
+                JSONObject object = commonResult.getData();
+                //更新直播课程基本信息
+                liveCourse.setCourseId(object.getLong("course_id"));
+                baseMapper.updateById(liveCourse);
+                //直播课程描述信息更新
+                LiveCourseDescription liveCourseDescription =
+                        liveCourseDescriptionService.getByLiveCourseId(liveCourse.getId());
+                liveCourseDescription.setDescription(liveCourseFormVo.getDescription());
+                liveCourseDescriptionService.updateById(liveCourseDescription);
+            } else {
+                //TODO
+                //throw new GgktException(20001,"修改直播课程失败");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public LiveCourseFormVo getLiveCourseFormVo(Long id) {
+        LiveCourse liveCourse = this.getById(id);
+        LiveCourseDescription liveCourseDescription = liveCourseDescriptionService.getByLiveCourseId(id);
+
+        LiveCourseFormVo liveCourseFormVo = new LiveCourseFormVo();
+        BeanUtils.copyProperties(liveCourse, liveCourseFormVo);
+        liveCourseFormVo.setDescription(liveCourseDescription.getDescription());
+        return liveCourseFormVo;
+    }
 }

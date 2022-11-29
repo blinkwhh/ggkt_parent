@@ -25,4 +25,10 @@ public interface LiveCourseService extends IService<LiveCourse> {
 
     //直播课程删除接口
     void removeLive(Long id);
+
+    //修改
+    void updateLiveById(LiveCourseFormVo liveCourseVo);
+
+    //获取
+    LiveCourseFormVo getLiveCourseFormVo(Long id);
 }

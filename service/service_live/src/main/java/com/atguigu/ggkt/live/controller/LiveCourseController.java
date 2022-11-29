@@ -56,5 +56,27 @@ public class LiveCourseController {
         liveCourseService.removeLive(id);
         return Result.ok(null);
     }
+
+    //id查询课程基本信息
+    @ApiOperation(value = "获取")
+    @GetMapping("get/{id}")
+    public Result<LiveCourse> get(@PathVariable Long id) {
+        LiveCourse liveCourse = liveCourseService.getById(id);
+        return Result.ok(liveCourse);
+    }
+
+    //id查询直播课程基本信息和描述信息
+    @ApiOperation(value = "获取")
+    @GetMapping("getInfo/{id}")
+    public Result<LiveCourseFormVo> getInfo(@PathVariable Long id) {
+        return Result.ok(liveCourseService.getLiveCourseFormVo(id));
+    }
+
+    @ApiOperation(value = "修改")
+    @PutMapping("update")
+    public Result updateById(@RequestBody LiveCourseFormVo liveCourseVo) {
+        liveCourseService.updateLiveById(liveCourseVo);
+        return Result.ok(null);
+    }
 }
 

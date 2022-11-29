@@ -1,6 +1,8 @@
 package com.atguigu.ggkt.live.controller;
 
 
+import com.atguigu.ggkt.model.live.LiveCourseDescription;
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/live/live-course-description")
 public class LiveCourseDescriptionController {
+
+    public interface LiveCourseDescriptionService extends IService<LiveCourseDescription> {
+        LiveCourseDescription getByLiveCourseId(Long liveCourseId);
+    }
 
 }
 
