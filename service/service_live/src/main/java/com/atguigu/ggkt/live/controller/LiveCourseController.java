@@ -49,5 +49,12 @@ public class LiveCourseController {
         liveCourseService.save(liveCourseVo);
         return Result.ok(null);
     }
+
+    @ApiOperation(value = "删除")
+    @DeleteMapping("remove/{id}")
+    public Result remove(@PathVariable Long id) {
+        liveCourseService.removeLive(id);
+        return Result.ok(null);
+    }
 }
 

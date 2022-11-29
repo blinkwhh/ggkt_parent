@@ -114,4 +114,26 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
         }
         return true;
     }
+
+    //直播课程删除接口实现类
+    @Override
+    public void removeLive(Long id) {
+
+        //根据id查询直播课程信息
+        LiveCourse liveCourse = baseMapper.selectById(id);
+        if(liveCourse != null) {
+            //获取直播courseid
+            Long courseId = liveCourse.getCourseId();
+            try {
+                //调用方法删除平台直播课程
+                mtCloudClient.courseDelete(courseId.toString());
+                //删除表数据
+                //TODO 这里的baseMapper怎么知道要删除表里的课程
+                baseMapper.deleteById(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+                //throw new GgktException(20001,"删除直播课程失败");
+            }
+        }
+    }
 }

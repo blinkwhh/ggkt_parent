@@ -22,4 +22,7 @@ public interface LiveCourseService extends IService<LiveCourse> {
 
     //新增直播课程
     Boolean save(LiveCourseFormVo liveCourseVo) throws Exception;
+
+    //直播课程删除接口
+    void removeLive(Long id);
 }
