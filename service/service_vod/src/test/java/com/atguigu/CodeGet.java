@@ -21,7 +21,7 @@ public class CodeGet {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
         //gc.setOutputDir(projectPath + "/src/main/java");
-        gc.setOutputDir("D:\\ABCproj2022\\ggkt_parent\\service\\service_wechat"+"/src/main/java");
+        gc.setOutputDir("D:\\ABCproj2022\\ggkt_parent\\service\\service_live"+"/src/main/java");
 
         gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setAuthor("wanghanhan");
@@ -30,7 +30,7 @@ public class CodeGet {
 
         // 3、数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/glkt_wechat");
+        dsc.setUrl("jdbc:mysql://localhost:3306/glkt_live");
         dsc.setDriverName("com.mysql.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("whh1999");
@@ -39,7 +39,7 @@ public class CodeGet {
 
         // 4、包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("wechat"); //模块名
+        pc.setModuleName("live"); //模块名
         pc.setParent("com.atguigu.ggkt");
 
         pc.setController("controller");
@@ -51,7 +51,8 @@ public class CodeGet {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("menu");
+        strategy.setInclude("live_course", "live_course_account", "live_course_config",
+                "live_course_description", "live_course_goods", "live_visitor");
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
 
