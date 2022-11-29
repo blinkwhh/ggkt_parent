@@ -7,13 +7,10 @@ import com.atguigu.ggkt.client.course.CourseFeignClient;
 import com.atguigu.ggkt.live.mapper.LiveCourseMapper;
 import com.atguigu.ggkt.live.mtcloud.CommonResult;
 import com.atguigu.ggkt.live.mtcloud.MTCloud;
-import com.atguigu.ggkt.live.service.LiveCourseAccountService;
-import com.atguigu.ggkt.live.service.LiveCourseDescriptionService;
-import com.atguigu.ggkt.live.service.LiveCourseService;
-import com.atguigu.ggkt.model.live.LiveCourse;
-import com.atguigu.ggkt.model.live.LiveCourseAccount;
-import com.atguigu.ggkt.model.live.LiveCourseDescription;
+import com.atguigu.ggkt.live.service.*;
+import com.atguigu.ggkt.model.live.*;
 import com.atguigu.ggkt.model.vod.Teacher;
+import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -54,6 +51,12 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
 
     @Resource
     private MTCloud mtCloudClient;
+
+    @Autowired
+    private LiveCourseConfigService liveCourseConfigService;
+
+    @Autowired
+    private LiveCourseGoodsService liveCourseGoodsService;
     //直播课程分页查询
     @Override
     public IPage<LiveCourse> selectPage(Page<LiveCourse> pageParam) {
@@ -196,5 +199,17 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
         BeanUtils.copyProperties(liveCourse, liveCourseFormVo);
         liveCourseFormVo.setDescription(liveCourseDescription.getDescription());
         return liveCourseFormVo;
+    }
+
+    @Override
+    public LiveCourseConfigVo getCourseConfig(Long id) {
+        LiveCourseConfigVo liveCourseConfigVo = new LiveCourseConfigVo();
+        LiveCourseConfig liveCourseConfig = liveCourseConfigService.getByLiveCourseId(id);
+        if(null != liveCourseConfig) {
+            List<LiveCourseGoods> liveCourseGoodsList = liveCourseGoodsService.findByLiveCourseId(id);
+            BeanUtils.copyProperties(liveCourseConfig, liveCourseConfigVo);
+            liveCourseConfigVo.setLiveCourseGoodsList(liveCourseGoodsList);
+        }
+        return liveCourseConfigVo;
     }
 }

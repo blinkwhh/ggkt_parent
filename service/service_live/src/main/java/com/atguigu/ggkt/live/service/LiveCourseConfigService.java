@@ -13,4 +13,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LiveCourseConfigService extends IService<LiveCourseConfig> {
 
+
+    //查看配置信息
+    LiveCourseConfig getByLiveCourseId(Long id);
+
 }

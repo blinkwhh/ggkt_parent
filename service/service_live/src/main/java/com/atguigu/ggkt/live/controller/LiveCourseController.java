@@ -85,5 +85,11 @@ public class LiveCourseController {
     public Result<LiveCourseAccount> getLiveCourseAccount(@PathVariable Long id) {
         return Result.ok(liveCourseAccountService.getByLiveCourseId(id));
     }
+
+    @ApiOperation(value = "获取")
+    @GetMapping("getCourseConfig/{id}")
+    public Result getCourseConfig(@PathVariable Long id) {
+        return Result.ok(liveCourseService.getCourseConfig(id));
+    }
 }
 
