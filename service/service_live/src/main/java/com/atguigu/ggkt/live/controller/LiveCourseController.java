@@ -99,5 +99,11 @@ public class LiveCourseController {
         liveCourseService.updateConfig(liveCourseConfigVo);
         return Result.ok(null);
     }
+
+    @ApiOperation(value = "获取最近的直播")
+    @GetMapping("findLatelyList")
+    public Result findLatelyList() {
+        return Result.ok(liveCourseService.findLatelyList());
+    }
 }
 

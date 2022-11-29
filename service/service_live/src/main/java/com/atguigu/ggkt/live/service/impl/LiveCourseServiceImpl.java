@@ -11,9 +11,11 @@ import com.atguigu.ggkt.live.mtcloud.MTCloud;
 import com.atguigu.ggkt.live.service.*;
 import com.atguigu.ggkt.model.live.*;
 import com.atguigu.ggkt.model.vod.Teacher;
+import com.atguigu.ggkt.utils.DateUtil;
 import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
 import com.atguigu.ggkt.vo.live.LiveCourseGoodsView;
+import com.atguigu.ggkt.vo.live.LiveCourseVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -277,5 +280,41 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
             //TODO
             //throw new GgktException(20001,"修改配置信息失败");
         }
+    }
+
+    @Override
+    public List<LiveCourseVo> findLatelyList() {
+        List<LiveCourseVo> liveCourseVoList = baseMapper.findLatelyList();
+
+        for(LiveCourseVo liveCourseVo : liveCourseVoList) {
+            liveCourseVo.setStartTimeString(new DateTime(liveCourseVo.getStartTime()).toString("yyyy年MM月dd HH:mm"));
+            liveCourseVo.setEndTimeString(new DateTime(liveCourseVo.getEndTime()).toString("HH:mm"));
+
+            Long teacherId = liveCourseVo.getTeacherId();
+            Teacher teacher = teacherFeignClient.getTeacherLive(teacherId);
+            liveCourseVo.setTeacher(teacher);
+
+            liveCourseVo.setLiveStatus(this.getLiveStatus(liveCourseVo));
+        }
+        return liveCourseVoList;
+    }
+
+    /**
+     * 直播状态 0：未开始 1：直播中 2：直播结束
+     * @param liveCourse
+     * @return
+     */
+    private int getLiveStatus(LiveCourse liveCourse) {
+        // 直播状态 0：未开始 1：直播中 2：直播结束
+        int liveStatus = 0;
+        Date curTime = new Date();
+        if(DateUtil.dateCompare(curTime, liveCourse.getStartTime())) {
+            liveStatus = 0;
+        } else if(DateUtil.dateCompare(curTime, liveCourse.getEndTime())) {
+            liveStatus = 1;
+        } else {
+            liveStatus = 2;
+        }
+        return liveStatus;
     }
 }

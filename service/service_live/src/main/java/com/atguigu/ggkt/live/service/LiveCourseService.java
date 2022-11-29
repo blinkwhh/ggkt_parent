@@ -4,9 +4,12 @@ package com.atguigu.ggkt.live.service;
 import com.atguigu.ggkt.model.live.LiveCourse;
 import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
+import com.atguigu.ggkt.vo.live.LiveCourseVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -37,4 +40,7 @@ public interface LiveCourseService extends IService<LiveCourse> {
 
     //修改配置
     void updateConfig(LiveCourseConfigVo liveCourseConfigVo);
+
+    //获取最近的直播
+    List<LiveCourseVo> findLatelyList();
 }
