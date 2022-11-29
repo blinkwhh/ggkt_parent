@@ -3,6 +3,7 @@ package com.atguigu.ggkt.live.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.atguigu.ggkt.client.course.CourseFeignClient;
 import com.atguigu.ggkt.live.mapper.LiveCourseMapper;
 import com.atguigu.ggkt.live.mtcloud.CommonResult;
@@ -12,6 +13,8 @@ import com.atguigu.ggkt.model.live.*;
 import com.atguigu.ggkt.model.vod.Teacher;
 import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
+import com.atguigu.ggkt.vo.live.LiveCourseGoodsView;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -211,5 +215,67 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
             liveCourseConfigVo.setLiveCourseGoodsList(liveCourseGoodsList);
         }
         return liveCourseConfigVo;
+    }
+
+    @Override
+    public void updateConfig(LiveCourseConfigVo liveCourseConfigVo) {
+        LiveCourseConfig liveCourseConfigUpt = new LiveCourseConfig();
+        BeanUtils.copyProperties(liveCourseConfigVo, liveCourseConfigUpt);
+        if(null == liveCourseConfigVo.getId()) {
+            liveCourseConfigService.save(liveCourseConfigUpt);
+        } else {
+            liveCourseConfigService.updateById(liveCourseConfigUpt);
+        }
+        // TODO 改配置为啥要改商品
+        liveCourseGoodsService.remove(new LambdaQueryWrapper<LiveCourseGoods>().eq(LiveCourseGoods::getLiveCourseId, liveCourseConfigVo.getLiveCourseId()));
+        if(!CollectionUtils.isEmpty(liveCourseConfigVo.getLiveCourseGoodsList())) {
+            liveCourseGoodsService.saveBatch(liveCourseConfigVo.getLiveCourseGoodsList());
+        }
+        this.updateLifeConfig(liveCourseConfigVo);
+    }
+
+    /**
+     * 上传直播配置
+     * @param liveCourseConfigVo
+     */
+    @SneakyThrows
+    private void updateLifeConfig(LiveCourseConfigVo liveCourseConfigVo) {
+        LiveCourse liveCourse = this.getById(liveCourseConfigVo.getLiveCourseId());
+
+        //参数设置
+        HashMap<Object,Object> options = new HashMap<Object, Object>();
+        //界面模式
+        options.put("pageViewMode", liveCourseConfigVo.getPageViewMode());
+        //观看人数开关
+        JSONObject number = new JSONObject();
+        number.put("enable", liveCourseConfigVo.getNumberEnable());
+        options.put("number", number.toJSONString());
+        //观看人数开关
+        JSONObject store = new JSONObject();
+        number.put("enable", liveCourseConfigVo.getStoreEnable());
+        number.put("type", liveCourseConfigVo.getStoreType());
+        options.put("store", number.toJSONString());
+        //商城列表
+        List<LiveCourseGoods> liveCourseGoodsList = liveCourseConfigVo.getLiveCourseGoodsList();
+        if(!CollectionUtils.isEmpty(liveCourseGoodsList)) {
+            List<LiveCourseGoodsView> liveCourseGoodsViewList = new ArrayList<>();
+            for(LiveCourseGoods liveCourseGoods : liveCourseGoodsList) {
+                LiveCourseGoodsView liveCourseGoodsView = new LiveCourseGoodsView();
+                BeanUtils.copyProperties(liveCourseGoods, liveCourseGoodsView);
+                liveCourseGoodsViewList.add(liveCourseGoodsView);
+            }
+            JSONObject goodsListEdit = new JSONObject();
+            goodsListEdit.put("status", "0");
+            options.put("goodsListEdit ", goodsListEdit.toJSONString());
+            options.put("goodsList", JSON.toJSONString(liveCourseGoodsViewList));
+        }
+
+        String res = mtCloudClient.courseUpdateLifeConfig(liveCourse.getCourseId().toString(), options);
+
+        CommonResult<JSONObject> commonResult = JSON.parseObject(res, CommonResult.class);
+        if(Integer.parseInt(commonResult.getCode()) != MTCloud.CODE_SUCCESS) {
+            //TODO
+            //throw new GgktException(20001,"修改配置信息失败");
+        }
     }
 }

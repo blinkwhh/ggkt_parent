@@ -34,4 +34,7 @@ public interface LiveCourseService extends IService<LiveCourse> {
     LiveCourseFormVo getLiveCourseFormVo(Long id);
 
     LiveCourseConfigVo getCourseConfig(Long id);
+
+    //修改配置
+    void updateConfig(LiveCourseConfigVo liveCourseConfigVo);
 }
