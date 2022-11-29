@@ -4,6 +4,7 @@ package com.atguigu.ggkt.live.controller;
 import com.atguigu.ggkt.live.service.LiveCourseAccountService;
 import com.atguigu.ggkt.live.service.LiveCourseService;
 import com.atguigu.ggkt.model.live.LiveCourse;
+import com.atguigu.ggkt.model.live.LiveCourseAccount;
 import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -77,6 +78,12 @@ public class LiveCourseController {
     public Result updateById(@RequestBody LiveCourseFormVo liveCourseVo) {
         liveCourseService.updateLiveById(liveCourseVo);
         return Result.ok(null);
+    }
+
+    @ApiOperation(value = "获取")
+    @GetMapping("getLiveCourseAccount/{id}")
+    public Result<LiveCourseAccount> getLiveCourseAccount(@PathVariable Long id) {
+        return Result.ok(liveCourseAccountService.getByLiveCourseId(id));
     }
 }
 
