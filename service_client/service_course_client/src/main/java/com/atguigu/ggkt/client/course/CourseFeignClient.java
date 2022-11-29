@@ -1,6 +1,7 @@
 package com.atguigu.ggkt.client.course;
 
 import com.atguigu.ggkt.model.vod.Course;
+import com.atguigu.ggkt.model.vod.Teacher;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,4 +24,7 @@ public interface CourseFeignClient {
     @ApiOperation("根据ID查询课程")
     @GetMapping("/api/vod/course/inner/getById/{courseId}")
     Course getById(@PathVariable Long courseId);
+
+    @GetMapping("/admin/vod/teacher/inner/getTeacher/{id}")
+    Teacher getTeacherLive(@PathVariable Long id);
 }

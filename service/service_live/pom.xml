@@ -22,6 +22,11 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        <dependency>
+            <groupId>com.atguigu</groupId>
+            <artifactId>service_course_client</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <artifactId>service_live</artifactId>

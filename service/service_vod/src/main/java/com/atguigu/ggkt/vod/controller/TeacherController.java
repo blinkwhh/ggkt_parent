@@ -147,5 +147,12 @@ public class TeacherController {
         teacherService.removeByIds(idList);
         return Result.ok(null);
     }
+
+    @ApiOperation("根据id查询")
+    @GetMapping("inner/getTeacher/{id}")
+    public Teacher getTeacherLive(@PathVariable Long id) {
+        Teacher teacher = teacherService.getById(id);
+        return teacher;
+    }
 }
 
