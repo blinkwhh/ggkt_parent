@@ -2,6 +2,8 @@ package com.atguigu.ggkt.live.service;
 
 
 import com.atguigu.ggkt.model.live.LiveCourse;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -14,4 +16,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LiveCourseService extends IService<LiveCourse> {
 
+    //直播课程分页查询
+    IPage<LiveCourse> selectPage(Page<LiveCourse> pageParam);
 }
