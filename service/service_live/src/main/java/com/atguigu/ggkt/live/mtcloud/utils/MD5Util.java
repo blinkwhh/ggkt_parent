@@ -1,4 +1,4 @@
-package com.mtcloud.sdk.utils;
+package com.atguigu.ggkt.live.mtcloud.utils;
 
 import java.io.File;
 import java.io.FileInputStream;

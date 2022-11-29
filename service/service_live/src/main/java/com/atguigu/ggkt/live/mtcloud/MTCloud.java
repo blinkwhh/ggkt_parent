@@ -4,6 +4,7 @@
 
 package com.atguigu.ggkt.live.mtcloud;
 
+
 import com.atguigu.ggkt.live.mtcloud.utils.MD5Util;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -27,9 +28,12 @@ import java.util.*;
 
 public class MTCloud {
 
+
+
     /**
      * 合作方ID： 合作方在欢拓平台的唯一ID
      */
+    //TODO 改成自己的账号
     public String openID = "43873";
 
     /**

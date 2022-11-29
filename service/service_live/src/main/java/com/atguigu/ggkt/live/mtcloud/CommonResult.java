@@ -1,4 +1,4 @@
-package com.mtcloud.sdk;
+package com.atguigu.ggkt.live.mtcloud;
 
 import java.io.Serializable;
 
