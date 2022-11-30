@@ -7,6 +7,7 @@ import com.atguigu.ggkt.vo.vod.CourseQueryVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,4 +43,7 @@ public interface CourseService extends IService<Course> {
 
     //删除课程
     void removeCourseById(Long id);
+
+    //查询课程列表
+    List<Course> findList();
 }

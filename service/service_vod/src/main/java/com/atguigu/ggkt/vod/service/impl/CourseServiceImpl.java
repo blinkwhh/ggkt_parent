@@ -125,6 +125,16 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         baseMapper.deleteById(id);
     }
 
+    //查询课程列表
+    @Override
+    public List<Course> findList() {
+        List<Course> list = baseMapper.selectList(null);
+        list.stream().forEach(item -> {
+            this.getTeacherOrSubjectName(item);
+        });
+        return list;
+    }
+
     //课程列表
     @Override
     public Map<String, Object> findPage(Page<Course> pageParam, CourseQueryVo courseQueryVo) {

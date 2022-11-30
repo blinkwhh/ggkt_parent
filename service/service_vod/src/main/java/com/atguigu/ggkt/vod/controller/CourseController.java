@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,6 +94,13 @@ public class CourseController {
     public Result remove(@PathVariable Long id) {
         courseService.removeCourseById(id);
         return Result.ok();
+    }
+
+    @ApiOperation(value = "查询课程列表")
+    @GetMapping("findAll")
+    public Result findAll() {
+        List<Course> list = courseService.findList();
+        return Result.ok(list);
     }
 }
 
