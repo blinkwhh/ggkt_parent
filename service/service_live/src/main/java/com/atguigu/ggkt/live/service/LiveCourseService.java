@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -47,4 +48,7 @@ public interface LiveCourseService extends IService<LiveCourse> {
 
     //从欢拓云获取access_token
     JSONObject getPlayAuth(Long id, Long userId);
+
+    //根据ID查询课程
+    Map<String, Object> getInfoById(Long courseId);
 }

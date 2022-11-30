@@ -30,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -322,6 +319,27 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
             //throw new GgktException(20001,"获取失败");
         }
         return null;
+    }
+
+    //根据ID查询课程
+    @Override
+    public Map<String, Object> getInfoById(Long courseId) {
+        LiveCourse liveCourse = this.getById(courseId);
+        liveCourse.getParam().put("startTimeString", new DateTime(liveCourse.getStartTime()).toString("yyyy年MM月dd HH:mm"));
+        liveCourse.getParam().put("endTimeString", new DateTime(liveCourse.getEndTime()).toString("yyyy年MM月dd HH:mm"));
+        Teacher teacher = teacherFeignClient.getTeacherLive(liveCourse.getTeacherId());
+        LiveCourseDescription liveCourseDescription = liveCourseDescriptionService.getByLiveCourseId(courseId);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("liveCourse", liveCourse);
+        map.put("liveStatus", this.getLiveStatus(liveCourse));
+        map.put("teacher", teacher);
+        if(null != liveCourseDescription) {
+            map.put("description", liveCourseDescription.getDescription());
+        } else {
+            map.put("description", "");
+        }
+        return map;
     }
 
     /**

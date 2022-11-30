@@ -5,12 +5,14 @@ import com.atguigu.ggkt.live.service.LiveCourseService;
 import com.atguigu.ggkt.result.Result;
 import com.atguigu.ggkt.utils.AuthContextHolder;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @author 王寒寒
@@ -30,5 +32,12 @@ public class LiveCourseApiController {
         return Result.ok(object);
     }
 
-
+    @ApiOperation("根据ID查询课程")
+    @GetMapping("getInfo/{courseId}")
+    public Result getInfo(
+            @ApiParam(value = "课程ID", required = true)
+            @PathVariable Long courseId){
+        Map<String, Object> map = liveCourseService.getInfoById(courseId);
+        return Result.ok(map);
+    }
 }
