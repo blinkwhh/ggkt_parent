@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.atguigu.ggkt.client.course.CourseFeignClient;
+import com.atguigu.ggkt.client.user.UserInfoFeignClient;
 import com.atguigu.ggkt.live.mapper.LiveCourseMapper;
 import com.atguigu.ggkt.live.mtcloud.CommonResult;
 import com.atguigu.ggkt.live.mtcloud.MTCloud;
 import com.atguigu.ggkt.live.service.*;
 import com.atguigu.ggkt.model.live.*;
+import com.atguigu.ggkt.model.user.UserInfo;
 import com.atguigu.ggkt.model.vod.Teacher;
 import com.atguigu.ggkt.utils.DateUtil;
 import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
@@ -49,6 +51,9 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
 
     @Autowired
     private CourseFeignClient teacherFeignClient;
+
+    @Autowired
+    private UserInfoFeignClient userInfoFeignClient;
 
     @Resource
     private LiveCourseDescriptionService liveCourseDescriptionService;
@@ -297,6 +302,26 @@ public class LiveCourseServiceImpl extends ServiceImpl<LiveCourseMapper, LiveCou
             liveCourseVo.setLiveStatus(this.getLiveStatus(liveCourseVo));
         }
         return liveCourseVoList;
+    }
+
+    //从欢拓云获取access_token
+    @SneakyThrows
+    @Override
+    public JSONObject getPlayAuth(Long id, Long userId) {
+        LiveCourse liveCourse = this.getById(id);
+        UserInfo userInfo = userInfoFeignClient.getById(userId);
+        HashMap<Object,Object> options = new HashMap<Object, Object>();
+        String res = mtCloudClient.courseAccess(liveCourse.getCourseId().toString(), userId.toString(), userInfo.getNickName(), MTCloud.ROLE_USER, 80*80*80, options);
+        CommonResult<JSONObject> commonResult = JSON.parseObject(res, CommonResult.class);
+        if(Integer.parseInt(commonResult.getCode()) == MTCloud.CODE_SUCCESS) {
+            JSONObject object = commonResult.getData();
+            System.out.println("access::"+object.getString("access_token"));
+            return object;
+        } else {
+            //TODO
+            //throw new GgktException(20001,"获取失败");
+        }
+        return null;
     }
 
     /**

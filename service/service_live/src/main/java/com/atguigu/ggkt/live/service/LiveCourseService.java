@@ -1,6 +1,7 @@
 package com.atguigu.ggkt.live.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.ggkt.model.live.LiveCourse;
 import com.atguigu.ggkt.vo.live.LiveCourseConfigVo;
 import com.atguigu.ggkt.vo.live.LiveCourseFormVo;
@@ -43,4 +44,7 @@ public interface LiveCourseService extends IService<LiveCourse> {
 
     //获取最近的直播
     List<LiveCourseVo> findLatelyList();
+
+    //从欢拓云获取access_token
+    JSONObject getPlayAuth(Long id, Long userId);
 }
